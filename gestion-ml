@@ -1,0 +1,45 @@
+### Explications des fichiers
+# ce fichier est réalise la gestion des modèles de machine learning (création, suppression et remplacement)
+# bd_entrainement = base de données qui a des données utilisées pour l'entrainement des modèles (données des auteurs et utilisateurs)
+# bd_produits = base de données avec tous les produits déjà traités par le logiciel
+
+### bibliothèques
+import os
+import sqlite3
+import joblib
+import pandas as pd
+from datime import datetime
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.svm import LinearSVC
+from rich.progress import Progress
+
+### Fonctions
+def __init__ (self, chemin_bd)
+  #self.chemin_bd_entrainement = chemin_bd_entrainement
+  self.maj_bd_entrainement()
+  
+def maj_bd_entraitenement (self):
+  #creer fonctions de maj de la bd_entrainement à partir de la bd_produits
+  recreer_modeles()
+
+def recreer_modeles (self):
+  for fichier in [
+    "vectoriseur.joblib",
+    "modele_basevariante.joblib",
+    "modele_gamme.joblib"
+  ]:
+    chemin_fichier_modele = os.path.join(MODELES_DIR, nom_fichier) # cette fonction réalise le chemin ".../MODELES_DIR/xxx.joblib"
+    if os.path.exists (chemin_fichiers_modeles):
+      os.remove(chemin_fichier_modele) # si le modèle déjà existe, le supprimer
+    creer_modeles()
+
+def creer_modeles (self):
+  #écrire création des modèles
+  try:
+    with Progress() as progression:
+    tache
+
+  
+
+  
