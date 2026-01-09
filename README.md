@@ -8,7 +8,8 @@ Ce projet est un logiciel de traitement de données d’achats alimentaires dest
 Son objectif est d’assister les cantines dans la réalisation de leurs déclarations sur la plateforme *Ma Cantine* et dans le suivi de leurs diagnostics internes en matière de durabilité des achats alimentaires.
 
 Le projet est actuellement en **phase de refonte complète**, à la suite d’un développement antérieur réalisé dans le cadre d’un stage.  
-Cette nouvelle version est développée comme un **projet personnel open-source**, avec une architecture repensée et l’utilisation exclusive de données publiques.
+Cette nouvelle version est développée comme un **projet personnel open-source**, avec une architecture repensée et l’utilisation exclusive de données publiques. 
+Un logiciel complémentaire est en train d'être développé afin de collecter et structurer ces données : https://github.com/WallaceVBB/Designation-Fournisseur-Tracker
 
 
 ## Objectifs
