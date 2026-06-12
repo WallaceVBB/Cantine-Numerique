@@ -23,13 +23,13 @@ BD_DIR = os.path.join(USER_APP_DIR, "bases_de_donnees") # sous-dossier pour les 
 chemin_bd_entrainement = os.path.join(BD_DIR, "bd_entrainement.db") # chemin vers la base de données d'entrainement
 chemin_bd_produits = os.path.join(BD_DIR, "bd_produits.db") # chemin vers la base de données des produits
 
-os.mkdir(USER_APP_DIR, exist_ok=True)
-os.mkdir(MODELES_DIR, exist_ok=True)
-os.mkdir(PARAMETRES_DIR, exist_ok=True)
-os.mkdir(GUI_DIR, exist_ok=True)
-os.mkdir(BD_DIR, exist_ok=True)
+os.makedirs(USER_APP_DIR, exist_ok=True)
+os.makedirs(MODELES_DIR, exist_ok=True)
+os.makedirs(PARAMETRES_DIR, exist_ok=True)
+os.makedirs(GUI_DIR, exist_ok=True)
+os.makedirs(BD_DIR, exist_ok=True)
 
-def resourse_path (relative_path):
+def ressource_path (relative_path):
     """Obtient le chemin absolu vers les ressources du programme, que le programme 
     soit empaqueté ou en script."""
     
@@ -53,7 +53,7 @@ def assurer_fichier_utilisateur (nom_fichier, sous_dossier=None):
     chemin_bundle = ressource_path(os.path.join(sous_dossier, nom_fichier) if sous_dossier else nom_fichier)
 
     if not os.path.exists(chemin_fichier_utilisateur):
-        shutil.copy(chemin_budle, chemin_fichier_utilisateur)
+        shutil.copy(chemin_bundle, chemin_fichier_utilisateur)
 
     return chemin_fichier_utilisateur
 
