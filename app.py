@@ -4,7 +4,7 @@
 import tkinter as tk
 from tkinter import ttk
 import threading
-#from services import data_service
+from services import data_service
 #import pages
 
 ### Fonctions
