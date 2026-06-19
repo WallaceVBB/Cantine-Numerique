@@ -61,8 +61,60 @@ def creer_modeles (self):
     chemin_bd_entrainement = resource_path("bases_de_donnees/bd_entrainement.db")
     if not os.path.exists(chemin_bd_entrainement):
       console.print("[red]La base de données d'entrainement est introuvable ![/red]")
-    chunks = 
+    chunks = pd.read_csv(chemin_csv_aliments, chunksize=1000)
+    donnees = pd.concat(chunks)
+    progression.update(tache_globale, advance=10)
+    progression.update(tache_etape, advance=1)
 
-  
 
+    # Nettoyage des données
+    console.print("Nettoyage des données...")
+    donnees = donnees[donnees['base_variante'].map(donnees['base_variante'].value_counts()) >= 4]
+    progression.update(tache_globale, advance=10)
+    progression.update(tache_etape, advance=1)
+    print("Nettoyage des texte designation réalisé pour la vectorisation")
+
+    # Vectorialisation de bases variantes
+    self.vectoriseur = TfidfVectorizer(max_features=3000, ngram_range=(1, 2), sublinear_tf=True, min_df=3)
+    textes = donnees['designation'].apply(self.nettoyer_texte).tolist()
+    X = self.vectoriseur.fit_transform(textes)
+    progression.update(tache_globale, advance=20)
+    progression.update(tache_etape, advance=1)
+
+    # Configuration des modèles avec LinearSVC
+    svc_params = {
+        'class_weight': 'balanced',
+        'max_iter': 1000
+    }
+
+    # Modèle base_variante
+    console.print("[blue]Entraînement du modèle base_variante (LinearSVC)...")
+    self.modele_basevariante = CalibratedClassifierCV(
+        LinearSVC(**svc_params),
+        cv=3
+    ).fit(X, donnees['base_variante'])
+    progression.update(tache_globale, advance=30)
+    progression.update(tache_etape, advance=1)
+
+    # Sauvegarde
+    console.print("Sauvegarde des modèles...")
+    joblib.dump(self.vectoriseur, os.path.join(USER_MODELES_DIR, 'vectoriseur.joblib'), compress=3)
+    joblib.dump(self.modele_basevariante, os.path.join(USER_MODELES_DIR, 'modele_basevariante.joblib'),
+                compress=3)
+    progression.update(tache_globale, advance=10)
+    progression.update(tache_etape, advance=1)
+
+    console.print(f"[bold green]✓ Modèles LinearSVC entraînés et sauvegardés dans {MODELES_DIR}")
+
+        except Exception as e:
+            console.print(f"[bold red]✗ Erreur lors de l'entraînement: {e}")
+            raise
+
+
+def nettoyer_texte(self, texte):
+      """Nettoie et normalise le texte"""
+      texte = str(texte).lower()
+      texte = re.sub(r'[^\w\s-]', '', texte)
+      texte = re.sub(r'\s+', ' ', texte).strip()
+      return texte
   
