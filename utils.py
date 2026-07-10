@@ -1,33 +1,53 @@
-### Explications du script
+### Explications du fichier
 # Ce fichier gère les chemins et répertoires utilisés par l'application.
 
-# AF (à faire) : 
-    # + ajouter la reconnaissance de la plateforme (Windows, MacOS, Linux)
+## TODO's:
+# TODO: il manque encore (essentiel) :
+#   - USER_DATA_DIR, USER_MODELES_DIR, USER_DONNEES_DIR
+#   - CHEMIN_BD, BUNDLE_BD et la copie initiale de la base de données utilisateur
+#   - la logique d'initialisation des fichiers CSV et des modèles dans le répertoire utilisateur
+#   - les fonctions de copie de ressources utilisateur et de vérification des fichiers existants
+# TODO (amèlioration): 
+#   - regrouper la gestion des chemins dans un module de configuration de l'environnement.
+#   - utiliser un vrai dossier utilisateur selon la plateforme, pas un chemin codé en dur.
+
+## Variables
 
 
 ### Bibliothèque
 import os
 import sys
 import shutil
+import platform
+from rich.console import Console
 
+## Préparation du Console pour faciliter debug
+console = Console() # console pour enrichir les impressions dans le terminal (complément pour la fonction print)
 
-###Fonctions et constantes
+### Code
 
-#### AF: ajouter fonction qui reconnaît la plateforme et choisi la bonne option pour le USER_APP_DIR
-USER_APP_DIR = os.path.expanduser("~AppData/Local/Cantine Egalim") # Dossier père sur Linux et Windows
-# USER_DATA_DIR = os.path.expanduser("~/Library/Application Support/Cantine Egalim") # Dossier père sur MacOS
+#### Déterminer le répertoire utilisateur en fonction de la plateforme
+if platform.system() == "Windows":
+    USER_APP_DIR = os.path.expanduser("~\\AppData\\Local\\Cantine Egalim")
+elif platform.system() == "Darwin":  # macOS
+    USER_APP_DIR = os.path.expanduser("~/Library/Application Support/Cantine Egalim")
+else:  # Linux
+    USER_APP_DIR = os.path.expanduser("~/.local/share/Cantine Egalim")
 MODELES_DIR = os.path.join(USER_APP_DIR, "modeles") # sous-dossier pour les modèles de machine learning
 PARAMETRES_DIR = os.path.join(USER_APP_DIR, "parametres") # sous-dossier pour les paramètres pour le traitement
 GUI_DIR = os.path.join(USER_APP_DIR, "gui") # sous-dossier pour les fichiers graphiques
 BD_DIR = os.path.join(USER_APP_DIR, "bases_de_donnees") # sous-dossier pour les bases de données
-chemin_bd_entrainement = os.path.join(BD_DIR, "bd_entrainement.db") # chemin vers la base de données d'entrainement
-chemin_bd_produits = os.path.join(BD_DIR, "bd_produits.db") # chemin vers la base de données des produits
+USER_DONNEES_DIR = os.path.join(USER_APP_DIR, "donnees") # sous-dossier pour les données utilisateur
+bd_entrainement = os.path.join(BD_DIR, "bd_entrainement.db") # chemin vers la base de données d'entrainement
+bd_pt = os.path.join(BD_DIR, "bd_produits.db") # chemin vers la base de données des produits traités
+CHEMIN_BD = bd_pt  # Alias pour compatibilité
 
 os.makedirs(USER_APP_DIR, exist_ok=True)
 os.makedirs(MODELES_DIR, exist_ok=True)
 os.makedirs(PARAMETRES_DIR, exist_ok=True)
 os.makedirs(GUI_DIR, exist_ok=True)
 os.makedirs(BD_DIR, exist_ok=True)
+os.makedirs(USER_DONNEES_DIR, exist_ok=True)
 
 def ressource_path (relative_path):
     """Obtient le chemin absolu vers les ressources du programme, que le programme 
@@ -63,7 +83,7 @@ def copier_fichier_ressource_vers_utilisateur ():
 
     fichiers_a_copier = [
         ("bd_entrainement.db", "bases_de_donnees"),
-        ("bd_produits.db", "bases_de_donnees")
+        ("bd_pt.db", "bases_de_donnees")
     ]
 
     for nom_fichier, sous_dossier in fichiers_a_copier:
